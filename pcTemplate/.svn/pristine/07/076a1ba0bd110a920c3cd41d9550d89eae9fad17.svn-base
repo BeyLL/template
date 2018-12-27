@@ -1,0 +1,19 @@
+import dva from 'dva';
+import createLoading from 'dva-loading';
+
+const runtimeDva = window.g_plugins.mergeConfig('dva');
+let app = dva({
+  history: window.g_history,
+  
+  ...(runtimeDva.config || {}),
+});
+
+window.g_app = app;
+app.use(createLoading());
+(runtimeDva.plugins || []).forEach(plugin => {
+  app.use(plugin);
+});
+app.use(require('../../plugins/onError.js').default);
+app.model({ namespace: 'app', ...(require('D:/FM/FMPROJ_Module/trunk/frontend/FMPM-UmiJS/src/models/app.js').default) });
+app.model({ namespace: 'model', ...(require('D:/FM/FMPROJ_Module/trunk/frontend/FMPM-UmiJS/src/pages/login/model.js').default) });
+app.model({ namespace: 'model', ...(require('D:/FM/FMPROJ_Module/trunk/frontend/FMPM-UmiJS/src/pages/users/model.js').default) });
